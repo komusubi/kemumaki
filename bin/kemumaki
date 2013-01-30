@@ -126,6 +126,15 @@ function run_report(){
   ${abs_dirname}/test.${name}/report ${test_status}
 }
 
+function vmapp(){
+  local dist_name=$1
+  local dest_dir=$2
+  [[ -n ${dist_name} ]] || dist_name=${vmapp_suite}
+  [[ -n ${dest_dir} ]] || dest_dir=${vmapp_deploy_dir} 
+  [[ -d ${vdc_dir} ]] || { echo "[ERROR] vdc_dir not found: ${vdc_dir}" >&2; return 1; }
+  ${vdc_dir}/vmapp/build.sh "${dist_name}" "${dest_dir}" 
+}
+
 LANG=C
 LC_ALL=C
 
@@ -169,6 +178,9 @@ setup)
   ;;
 test)
   run_tests $*
+  ;;
+vmapp)
+  vmapp $*
   ;;
 *)
   echo "[ERROR] no such command: ${command}"
